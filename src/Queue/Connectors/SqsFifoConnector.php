@@ -22,23 +22,25 @@ class SqsFifoConnector extends SqsConnector
     {
         $config = $this->getDefaultConfiguration($config);
 
-        if (!Str::endsWith($config['queue'], '.fifo')) {
-            throw new InvalidArgumentException('FIFO queue name must end in ".fifo"');
+        if (!Str::endsWith($config["queue"], ".fifo")) {
+            throw new InvalidArgumentException(
+                'FIFO queue name must end in ".fifo"'
+            );
         }
 
-        if (!empty($config['key']) && !empty($config['secret'])) {
-            $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
+        if (!empty($config["key"]) && !empty($config["secret"])) {
+            $config["credentials"] = Arr::only($config, ["key", "secret"]);
         }
 
-        $group = Arr::pull($config, 'group', 'default');
-        $deduplicator = Arr::pull($config, 'deduplicator', 'unique');
-        $allowDelay = (bool)Arr::pull($config, 'allow_delay', false);
+        $group = Arr::pull($config, "group", "default");
+        $deduplicator = Arr::pull($config, "deduplicator", "unique");
+        $allowDelay = (bool) Arr::pull($config, "allow_delay", false);
 
         return new SqsFifoQueue(
             new SqsClient($config),
-            $config['queue'],
-            Arr::get($config, 'prefix', ''),
-            Arr::get($config, 'suffix', ''),
+            $config["queue"],
+            Arr::get($config, "prefix", ""),
+            Arr::get($config, "suffix", ""),
             $group,
             $deduplicator,
             $allowDelay
@@ -55,16 +57,19 @@ class SqsFifoConnector extends SqsConnector
     protected function getDefaultConfiguration(array $config)
     {
         // Laravel >= 5.1 has the "getDefaultConfiguration" method.
-        if (method_exists(get_parent_class(), 'getDefaultConfiguration')) {
+        if (method_exists(get_parent_class(), "getDefaultConfiguration")) {
             return parent::getDefaultConfiguration($config);
         }
 
-        return array_merge([
-            'version' => 'latest',
-            'http' => [
-                'timeout' => 60,
-                'connect_timeout' => 60,
+        return array_merge(
+            [
+                "version" => "latest",
+                "http" => [
+                    "timeout" => 60,
+                    "connect_timeout" => 60,
+                ],
             ],
-        ], $config);
+            $config
+        );
     }
 }

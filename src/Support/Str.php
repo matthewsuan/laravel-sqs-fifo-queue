@@ -19,11 +19,11 @@ class Str extends BaseStr
      */
     public static function beforeLast($subject, $search)
     {
-        if ($search === '') {
+        if ($search === "") {
             return $subject;
         }
 
-        $pos = mb_strrpos($subject, $search, 0, 'UTF-8');
+        $pos = mb_strrpos($subject, $search, 0, "UTF-8");
 
         if ($pos === false) {
             return $subject;
@@ -44,8 +44,12 @@ class Str extends BaseStr
      *
      * @return string
      */
-    public static function substr($string, $start, $length = null)
-    {
-        return mb_substr($string, $start, $length, 'UTF-8');
+    public static function substr(
+        $string,
+        $start,
+        $length = null,
+        $encoding = "UTF-8"
+    ) {
+        return mb_substr($string, $start, $length, "UTF-8");
     }
 }
