@@ -29,7 +29,11 @@ class SqsFifoConnector extends SqsConnector
         }
 
         if (!empty($config["key"]) && !empty($config["secret"])) {
-            $config["credentials"] = Arr::only($config, ["key", "secret"]);
+            $config["credentials"] = Arr::only($config, [
+                "key",
+                "secret",
+                "token",
+            ]);
         }
 
         $group = Arr::pull($config, "group", "default");
@@ -37,7 +41,7 @@ class SqsFifoConnector extends SqsConnector
         $allowDelay = (bool) Arr::pull($config, "allow_delay", false);
 
         return new SqsFifoQueue(
-            new SqsClient($config),
+            new SqsClient(Arr::except($config, ["token"])),
             $config["queue"],
             Arr::get($config, "prefix", ""),
             Arr::get($config, "suffix", ""),
